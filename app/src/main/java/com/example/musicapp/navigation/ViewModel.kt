@@ -16,7 +16,9 @@ import kotlinx.coroutines.launch
 class MusicDataViewModel: ViewModel() {
     private val _playlists = MutableStateFlow<List<Playlist>>(emptyList())
     private val _defaultOrderPlaylists = MutableStateFlow<List<Playlist>>(emptyList())
+    private val _isLoading = MutableStateFlow(true)
     val playlists: StateFlow<List<Playlist>> = _playlists
+    val isLoading: StateFlow<Boolean> = _isLoading
     val trackCount = {}
     val playlistCount = {}
     fun sortingPlaylist(sorting_method: String, playlist_id: String){
@@ -28,5 +30,6 @@ class MusicDataViewModel: ViewModel() {
         val userMusicData: List<Playlist> = Gson().fromJson(jsonString, playlistListType)
         _defaultOrderPlaylists.value = userMusicData
         _playlists.value = userMusicData
+        _isLoading.value = false
     }
 }
