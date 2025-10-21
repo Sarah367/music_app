@@ -81,3 +81,10 @@ data class ExternalUrls(
 data class ExternalIds(
     val isrc: String
 )
+
+val userMusicDataFun = { jsonString: String ->
+    val playlistListType = object : TypeToken<List<Playlist>>() {}.type
+    val readData: List<Playlist> = Gson().fromJson(jsonString, playlistListType)
+    readData
+}
+var userMusicData: List<Playlist> = emptyList()
