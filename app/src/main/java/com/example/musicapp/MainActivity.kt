@@ -22,7 +22,6 @@ import com.example.musicapp.navigation.MusicSorterApp
 import com.example.musicapp.navigation.userMusicData
 import com.example.musicapp.navigation.userMusicDataFun
 
-//import com.example.musicapp.viewmodel.ViewPlaylist
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,20 +40,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// View Model is commented out for now ...
-//@Composable
-//fun ViewScreen(modifier: Modifier) {
-//    Column(modifier = modifier) {
-//        ViewPlaylist()
-//    }
-//}
-
 @Composable
 fun MyMusic(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val json = context.assets.open("user_playlists.json").bufferedReader().use { it.readText() } //set music data (look at line 15)
     userMusicData = userMusicDataFun(json)
-    println("Hello?")
     Column(modifier = modifier) {
         MusicSorterApp()
     }

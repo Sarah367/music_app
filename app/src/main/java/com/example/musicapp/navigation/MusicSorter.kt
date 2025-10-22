@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.material3.MaterialTheme
@@ -23,6 +25,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -45,8 +48,6 @@ fun MusicSorterApp(){
                     navController.getBackStackEntry("mainFlow")
                 }
                 val musicDataViewModel: MusicDataViewModel = viewModel(mainFlowEntry)
-//                val json = context.assets.open("user_playlists.json").bufferedReader().use { it.readText() } //set music data (look at line 15)
-//                musicDataViewModel.setMusicData(json)
                 PlaylistScreen(musicDataViewModel, navController)
             }
             composable(Routes.PLAYLIST) { backStackEntry ->
@@ -153,6 +154,7 @@ fun PlaylistTracksScreen(
     playlistId: String
 ){
     val playlists by musicDataViewModel.playlists.collectAsState()
+    val sortedState = musicDataViewModel.playlistSortedState(playlistId)
     val playlist = playlists.find {
         it.playlistId == playlistId // iterates through and finds the id of playlist.
     }
@@ -163,7 +165,7 @@ fun PlaylistTracksScreen(
     }
 
     var expanded by remember { mutableStateOf(false)}
-    var selectedSort by remember {mutableStateOf("Default")}
+    var selectedSort by remember {mutableStateOf(sortedState)}
     val sortingOptions = listOf("A-Z", "Artist", "Album", "Year", "Length", "Popularity", "Default")
 
     Column(modifier = Modifier.padding(16.dp)) {
@@ -276,18 +278,18 @@ fun TrackInfoScreen(
                 ),
             contentAlignment = Alignment.Center
         ) {
+            Text(
+                text = track.name.first().toString().uppercase(),
+                style = MaterialTheme.typography.headlineLarge,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                fontWeight = FontWeight.Bold
+            )
             AsyncImage(
                 model = track.album.images[2].url,
                 contentDescription = track.name,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
-//            Text(
-//                text = track.name.first().toString().uppercase(),
-//                style = MaterialTheme.typography.headlineLarge,
-//                color = MaterialTheme.colorScheme.onPrimaryContainer,
-//                fontWeight = FontWeight.Bold
-//            )
         }
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -308,7 +310,7 @@ fun TrackInfoScreen(
             TrackDetailRow("Artist", track.artists.joinToString{it.name})
             TrackDetailRow("Album", track.album.name)
             TrackDetailRow("Year", track.album.releaseDate.take(4)) // just take 4 characters of year
-            TrackDetailRow("Genre", track.externalUrls.spotify) // add genre later
+            TrackDetailRow("Listen", track.externalUrls.spotify)
         }
     }
 }
@@ -326,10 +328,19 @@ fun TrackDetailRow(label: String, value: String) {
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Bold
         )
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyLarge
-        )
+        if(!value.contains("https://open.spotify.com/track")) {
+            Text(
+                text = value,
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }else{
+            val uriHandler = LocalUriHandler.current
+            IconButton(
+                onClick = { uriHandler.openUri(value) }
+            ) {
+                Icon(imageVector = Icons.Default.PlayArrow, contentDescription = "Play Song")
+            }
+        }
     }
 }
 
