@@ -15,10 +15,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.musicapp.ui.theme.MusicAppTheme
 import com.example.musicapp.navigation.MusicSorterApp
-//import com.example.musicapp.viewmodel.ViewPlaylist
+import com.example.musicapp.navigation.userMusicData
+import com.example.musicapp.navigation.userMusicDataFun
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,16 +40,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// View Model is commented out for now ...
-//@Composable
-//fun ViewScreen(modifier: Modifier) {
-//    Column(modifier = modifier) {
-//        ViewPlaylist()
-//    }
-//}
-
 @Composable
 fun MyMusic(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    val json = context.assets.open("user_playlists.json").bufferedReader().use { it.readText() } //set music data (look at line 15)
+    userMusicData = userMusicDataFun(json)
     Column(modifier = modifier) {
         MusicSorterApp()
     }

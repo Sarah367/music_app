@@ -15,27 +15,27 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import coil3.compose.AsyncImage
 
 @Composable
 fun MusicSorterApp(){
     val context = LocalContext.current
-    val musicDataViewModel: MusicDataViewModel = viewModel()
-    LaunchedEffect(Unit) {
-        val json = context.assets.open("user_playlists.json").bufferedReader().use { it.readText() }
-        musicDataViewModel.setMusicData(json) //set music data (look at line 15)
-    }
     val navController = rememberNavController()
 
     NavHost(
@@ -43,14 +43,26 @@ fun MusicSorterApp(){
         startDestination = "mainFlow"
     ){
         navigation(startDestination = Routes.HOME, "mainFlow"){
-            composable(Routes.HOME) {
+            composable(Routes.HOME) { backStackEntry ->
+                val mainFlowEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("mainFlow")
+                }
+                val musicDataViewModel: MusicDataViewModel = viewModel(mainFlowEntry)
                 PlaylistScreen(musicDataViewModel, navController)
             }
             composable(Routes.PLAYLIST) { backStackEntry ->
+                val mainFlowEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("mainFlow")
+                }
+                val musicDataViewModel: MusicDataViewModel = viewModel(mainFlowEntry)
                 val playlistId = backStackEntry.arguments?.getString("playlistId") ?: "" // elvis operator, otherwise null
                 PlaylistTracksScreen(musicDataViewModel, navController, playlistId)
             }
             composable(Routes.TRACK) { backStackEntry ->
+                val mainFlowEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("mainFlow")
+                }
+                val musicDataViewModel: MusicDataViewModel = viewModel(mainFlowEntry)
                 val playlistId = backStackEntry.arguments?.getString("playlistId") ?: "" // otherwise, null...
                 val trackId = backStackEntry.arguments?.getString("trackId") ?: ""
                 TrackInfoScreen(musicDataViewModel, navController, playlistId, trackId)
@@ -142,6 +154,7 @@ fun PlaylistTracksScreen(
     playlistId: String
 ){
     val playlists by musicDataViewModel.playlists.collectAsState()
+    val sortedState = musicDataViewModel.playlistSortedState(playlistId)
     val playlist = playlists.find {
         it.playlistId == playlistId // iterates through and finds the id of playlist.
     }
@@ -152,8 +165,8 @@ fun PlaylistTracksScreen(
     }
 
     var expanded by remember { mutableStateOf(false)}
-    var selectedSort by remember {mutableStateOf("Default")}
-    val sortingOptions = listOf("A-Z", "Artist", "Album", "Year", "Genre", "Default")
+    var selectedSort by remember {mutableStateOf(sortedState)}
+    val sortingOptions = listOf("A-Z", "Artist", "Album", "Year", "Length", "Popularity", "Default")
 
     Column(modifier = Modifier.padding(16.dp)) {
         Text(
@@ -271,6 +284,12 @@ fun TrackInfoScreen(
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 fontWeight = FontWeight.Bold
             )
+            AsyncImage(
+                model = track.album.images[2].url,
+                contentDescription = track.name,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
         }
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -291,7 +310,7 @@ fun TrackInfoScreen(
             TrackDetailRow("Artist", track.artists.joinToString{it.name})
             TrackDetailRow("Album", track.album.name)
             TrackDetailRow("Year", track.album.releaseDate.take(4)) // just take 4 characters of year
-            TrackDetailRow("Genre", "Pop") // add genre later
+            TrackDetailRow("Listen", track.externalUrls.spotify)
         }
     }
 }
@@ -309,10 +328,19 @@ fun TrackDetailRow(label: String, value: String) {
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Bold
         )
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyLarge
-        )
+        if(!value.contains("https://open.spotify.com/track")) {
+            Text(
+                text = value,
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }else{
+            val uriHandler = LocalUriHandler.current
+            IconButton(
+                onClick = { uriHandler.openUri(value) }
+            ) {
+                Icon(imageVector = Icons.Default.PlayArrow, contentDescription = "Play Song")
+            }
+        }
     }
 }
 
