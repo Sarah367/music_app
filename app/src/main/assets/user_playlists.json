@@ -1,7 +1,7 @@
 [
     {
         "playlist_id": "1",
-        "playlist_name": "Playlist Short",
+        "playlist_name": "Jesse's Playlist",
         "tracks": [
             {
                 "preview_url": null,
@@ -3843,7 +3843,7 @@
     },
     {
         "playlist_id": "2",
-        "playlist_name": "Playlist Medium",
+        "playlist_name": "Sarah's Playlist",
         "tracks": [
             {
                 "preview_url": null,
@@ -22832,7 +22832,7 @@
     },
     {
         "playlist_id": "3",
-        "playlist_name": "Playlist Long",
+        "playlist_name": "Quick Hits",
         "tracks": [
             {
                 "preview_url": null,

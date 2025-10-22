@@ -1,6 +1,9 @@
 package com.example.musicapp.navigation
 
 import androidx.compose.ui.unit.dp
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -31,7 +34,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import coil3.compose.AsyncImage
+//import coil3.compose.AsyncImage
 
 @Composable
 fun MusicSorterApp(){
@@ -169,6 +172,22 @@ fun PlaylistTracksScreen(
     val sortingOptions = listOf("A-Z", "Artist", "Album", "Year", "Length", "Popularity", "Default")
 
     Column(modifier = Modifier.padding(16.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            IconButton(
+                onClick = { navController.navigateUp() }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back"
+                )
+            }
+
+        }
         Text(
             text = playlist.playlistName,
             style = MaterialTheme.typography.headlineLarge,
@@ -263,6 +282,21 @@ fun TrackInfoScreen(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            IconButton(
+                onClick = { navController.navigateUp()}
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back"
+                )
+            }
+        }
         Text(
             text = "Song Details",
             style = MaterialTheme.typography.headlineLarge,
@@ -284,12 +318,12 @@ fun TrackInfoScreen(
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 fontWeight = FontWeight.Bold
             )
-            AsyncImage(
-                model = track.album.images[2].url,
-                contentDescription = track.name,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
+//            AsyncImage(
+//                model = track.album.images[2].url,
+//                contentDescription = track.name,
+//                modifier = Modifier.fillMaxSize(),
+//                contentScale = ContentScale.Crop
+//            )
         }
         Spacer(modifier = Modifier.height(24.dp))
 
