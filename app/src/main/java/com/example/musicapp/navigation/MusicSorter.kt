@@ -57,6 +57,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import coil3.compose.AsyncImage
+import androidx.compose.ui.layout.ContentScale
 
 
 
@@ -415,6 +417,7 @@ fun EnhancedTrackCard(
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+
             Box(
                 modifier = Modifier
                     .size(50.dp)
@@ -429,6 +432,12 @@ fun EnhancedTrackCard(
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                AsyncImage(
+                    model = track.album.images[2].url,
+                    contentDescription = track.name,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
                 )
             }
             Spacer(modifier = Modifier.width(12.dp))
@@ -521,18 +530,19 @@ fun TrackInfoScreen(
                 ),
             contentAlignment = Alignment.Center
         ) {
+            AsyncImage(
+                model = track.album.images[2].url,
+                contentDescription = track.name,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
             Text(
                 text = track.name.first().toString().uppercase(),
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 fontWeight = FontWeight.Bold
             )
-//            AsyncImage(
-//                model = track.album.images[2].url,
-//                contentDescription = track.name,
-//                modifier = Modifier.fillMaxSize(),
-//                contentScale = ContentScale.Crop
-//            )
+
         }
         Spacer(modifier = Modifier.height(24.dp))
 
