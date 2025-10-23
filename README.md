@@ -12,7 +12,8 @@ such as name of the artist, album name, and release year, are displayed. Not onl
 to "Listen", which opens up the song on Spotify. 
 
 ### Home Screen (Playlist Screen)
-![Home Screen](screenshots/home_screen.png)
+<img width="246" height="545" alt="home_screen" src="https://github.com/user-attachments/assets/a86d32c2-c4f5-4186-b558-49c4a661db0d" />
+
 
 ### Second Screen (Playlist Tracks Screen)
 
