@@ -14,8 +14,9 @@ to "Listen", which opens up the song on Spotify.
 ### Home Screen (Playlist Screen)
 <img width="246" height="545" alt="home_screen" src="https://github.com/user-attachments/assets/a86d32c2-c4f5-4186-b558-49c4a661db0d" />
 
-
 ### Second Screen (Playlist Tracks Screen)
+<img width="255" height="567" alt="secondscreen" src="https://github.com/user-attachments/assets/3e39a140-a9e5-4559-aea8-e5adc7589f20" />
 
 ### Third Screen (Track Info Screen)
+<img width="257" height="566" alt="thirdscreen" src="https://github.com/user-attachments/assets/27d533bd-1d06-4c63-9ab2-f1269b3e73d3" />
 
