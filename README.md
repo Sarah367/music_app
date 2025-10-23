@@ -20,4 +20,7 @@ to "Listen", which opens up the song on Spotify.
 ### Third Screen (Track Info Screen)
 <img width="253" height="568" alt="thirdscreen" src="https://github.com/user-attachments/assets/340be020-d671-45e0-ba4a-f0468ab6149f" />
 
+### Demo Video
+https://github.com/user-attachments/assets/853e6e70-9baf-41c5-a6ee-20beb16f01e9
+
 
