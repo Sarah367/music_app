@@ -1,5 +1,15 @@
 package com.example.musicapp.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.EaseOut
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -25,6 +35,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
@@ -34,15 +45,32 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import coil3.compose.AsyncImage
+import kotlinx.coroutines.delay
 
 @Composable
 fun MusicSorterApp(){
-    val context = LocalContext.current
     val navController = rememberNavController()
 
     NavHost(
         navController = navController,
-        startDestination = "mainFlow"
+        startDestination = "mainFlow",
+        enterTransition = {
+            fadeIn(
+                animationSpec = tween(
+                    600, easing = LinearEasing
+                )
+            ) + scaleIn(
+                animationSpec = tween(300, easing = EaseIn),
+                initialScale = 0.8f
+            )
+        },
+        exitTransition = {
+            fadeOut(
+                animationSpec = tween(
+                    300, easing = LinearEasing
+                )
+            )
+        }
     ){
         navigation(startDestination = Routes.HOME, "mainFlow"){
             composable(Routes.HOME) { backStackEntry ->
@@ -233,8 +261,18 @@ fun TrackCard(
     track: Track,
     playlistId: String
 ){
+    val alphaAnimation = remember {
+        Animatable(0f)
+    }
+    LaunchedEffect(Unit) {
+        delay(100)
+        alphaAnimation.animateTo(1f)
+    }
     Card(
         modifier = Modifier
+            .graphicsLayer{
+                alpha = alphaAnimation.value
+            }
             .fillMaxWidth()
             .padding(vertical = 4.dp)
             .clickable {
