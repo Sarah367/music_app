@@ -18,5 +18,6 @@ to "Listen", which opens up the song on Spotify.
 <img width="255" height="567" alt="secondscreen" src="https://github.com/user-attachments/assets/3e39a140-a9e5-4559-aea8-e5adc7589f20" />
 
 ### Third Screen (Track Info Screen)
-<img width="257" height="566" alt="thirdscreen" src="https://github.com/user-attachments/assets/27d533bd-1d06-4c63-9ab2-f1269b3e73d3" />
+<img width="253" height="568" alt="thirdscreen" src="https://github.com/user-attachments/assets/340be020-d671-45e0-ba4a-f0468ab6149f" />
+
 
