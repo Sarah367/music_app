@@ -530,19 +530,18 @@ fun TrackInfoScreen(
                 ),
             contentAlignment = Alignment.Center
         ) {
-            AsyncImage(
-                model = track.album.images[2].url,
-                contentDescription = track.name,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
             Text(
                 text = track.name.first().toString().uppercase(),
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 fontWeight = FontWeight.Bold
             )
-
+            AsyncImage(
+                model = track.album.images[2].url,
+                contentDescription = track.name,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
         }
         Spacer(modifier = Modifier.height(24.dp))
 
